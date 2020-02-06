@@ -1,0 +1,24 @@
+language: python
+python: 3.6
+
+env:
+  global:
+    - CC_TEST_REPORTER_ID=3d17b3d5a27331288e03fced26dd49880eb04fd588b4f966aaa0bd4b9b98f7be
+ 
+install: make
+
+before_install:
+  - pip install poetry
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - make lint
+  - make run_test
+
+after_script:
+  - ./cc-test-reporter format-coverage -d -t coverage.py coverage.xml after-build $TRAVIS_TEST_RESULT
+  - if [[ "$TRAVIS_TEST_RESULT" == 0 ]]; then ./cc-test-reporter upload-coverage; fi
