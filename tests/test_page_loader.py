@@ -1,5 +1,8 @@
-from page_loader.scripts import page_loader
+from page_loader import cli
+
+FILE_NAME = 'hexlet-io-courses.html'
+PATH = 'https://hexlet.io/courses'
 
 
 def test_result():
-    assert 'Hello world!' == page_loader.main()
+    assert FILE_NAME == cli.get_file_name(PATH)

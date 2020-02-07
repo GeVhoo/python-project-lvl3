@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "GeVhoo_page_loader"
-version = "0.1.0"
+version = "0.1.1"
 description = "Useful utility to download pages from the network"
 authors = ["GeVhoo <gvahrushev@mail.ru>"]
 repository = "https://github.com/GeVhoo/python-project-lvl3"
@@ -16,6 +16,7 @@ flake8 = "^3.7.9"
 pytest-cov = "^2.8.1"
 pytest = "^5.3.5"
 coverage = "^5.0.3"
+requests = "^2.22.0"
 
 [tool.poetry.scripts]
 page-loader = "page_loader.scripts.page_loader:main"
