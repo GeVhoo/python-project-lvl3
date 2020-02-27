@@ -24,7 +24,7 @@ def get_folder(path_for_folder):
 
 
 def get_resource_url(base_url, resource_path):
-    if urlparse(resource_path)[1] is '':
+    if urlparse(resource_path)[1] == '':
         if os.path.splitext(resource_path)[1]:
             return base_url + resource_path
     else:

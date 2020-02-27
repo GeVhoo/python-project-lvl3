@@ -1,8 +1,11 @@
-from page_loader import cli
+from page_loader import getter
 
-FILE_NAME = 'hexlet-io-courses.html'
 PATH = 'https://hexlet.io/courses'
+HTML_FILE_NAME = 'hexlet-io-courses.html'
+FOLDER_NAME = 'hexlet-io-courses_files'
+BASE_URL = 'https://hexlet.io'
+BASE = BASE_URL, HTML_FILE_NAME, FOLDER_NAME
 
 
 def test_result():
-    assert FILE_NAME == cli.get_file_name(PATH)
+    assert BASE == getter.get_base_variables(PATH)
