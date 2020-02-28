@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from page_loader.constants import RESOURCES
 from page_loader import getter
+import logging
 
 parser = argparse.ArgumentParser(description='Page Loader')
 parser.add_argument('url', type=str, help='input page url')
@@ -11,10 +12,13 @@ parser.add_argument('-o', '--output',
                     default=None,
                     help='specify the directory to download')
 
+logging.basicConfig(format='[%(levelname)s]: %(message)s', level=logging.DEBUG)
+
 
 def run(args):
     url = args.url
     path = args.output
+    logging.info(f'Start downloading {url}')
 
     base_url, html_file_name, folder_name = getter.get_base_variables(url)
 
@@ -47,3 +51,4 @@ def run(args):
 
     with open(path_for_html_file, 'w') as f:
         f.write(soup.prettify())
+    logging.info('Download complite!')
