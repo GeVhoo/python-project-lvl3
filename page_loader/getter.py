@@ -1,6 +1,17 @@
 from urllib.parse import urlparse
 import re
 import os
+import logging
+import requests
+
+
+def get_response(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        logging.error(f'HTTP error occurred: {e}')
+    return response
 
 
 # Get base url (scheme + netloc), names for html file and resource folder.
@@ -18,9 +29,13 @@ def get_base_variables(url):
 
 
 def get_folder(path_for_folder):
-    if not os.path.exists(path_for_folder):
-        os.makedirs(path_for_folder)
-    return os.path.abspath(path_for_folder)
+    try:
+        if not os.path.exists(path_for_folder):
+            os.makedirs(path_for_folder)
+    except FileExistsError:
+        logging.error(f'This folder already exists: {path_for_folder}')
+    except PermissionError:
+        logging.error(f'Permission denied: {path_for_folder}')
 
 
 def get_resource_url(base_url, resource_path):

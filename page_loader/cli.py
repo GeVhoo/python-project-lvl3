@@ -1,9 +1,9 @@
 import argparse
-import requests
 from bs4 import BeautifulSoup
 from page_loader.constants import RESOURCES
 from page_loader import getter
 import logging
+from progress.bar import Bar
 
 parser = argparse.ArgumentParser(description='Page Loader')
 parser.add_argument('url', type=str, help='input page url')
@@ -39,29 +39,33 @@ def run(args):
         path_for_html_file = path + '/' + html_file_name
         path_for_folder = path + '/' + folder_name
 
-    path_for_resourses = getter.get_folder(path_for_folder)
+    getter.get_folder(path_for_folder)
 
-    data = requests.get(url).text
+    data = getter.get_response(url).text
     soup = BeautifulSoup(data, 'html.parser')
 
     logging.info('Start downloading local resources')
     index = 0
+    bar = Bar('Processing', max=1, suffix='%(percent)d%%')
+
     for tag, attr in RESOURCES.items():
         tag_list = soup.find_all(tag)
         for item in tag_list:
             value = item.get(attr)
             resource_url = getter.get_resource_url(base_url, value)
+            bar.next()
             if resource_url:
                 logging.debug(f'Start downloading: {value}')
-                response = requests.get(resource_url)
+                response = getter.get_response(resource_url)
                 data, write_mod = getter.get_content_type(response)
-                file_path = getter.get_resource_path(path_for_resourses, value)
+                file_path = getter.get_resource_path(path_for_folder, value)
                 index += 1
 
                 with open(file_path, write_mod) as f:
                     f.write(data)
                 item[attr] = file_path
                 logging.debug(f'File downloaded to: {file_path}')
+
     if index == 0:
         message = 'No local resources to download'
     else:
