@@ -16,10 +16,5 @@ def test_base_variables():
     assert BASE == getter.get_base_variables(URL)
 
 
-def test_resource_url():
-    assert RESOURCE_URL == getter.get_resource_url(BASE_URL, RESOURCE_TRUE)
-    assert getter.get_resource_url(BASE_URL, RESOURCE_FALSE) is None
-
-
 def test_resource_path():
     assert RESOURCE_PATH == getter.get_resource_path(PATH, RESOURCE_TRUE)
