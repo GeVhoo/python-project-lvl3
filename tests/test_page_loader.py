@@ -5,8 +5,10 @@ from bs4 import BeautifulSoup
 from requests.exceptions import HTTPError
 from page_loader import getter
 from page_loader import loader
+from page_loader import cli
 from tests.fixtures.const import (URL,
                                   FOLDER_NAME,
+                                  HTML_FILE_NAME,
                                   BASE,
                                   RESOURCE_TRUE,
                                   PATH,
@@ -73,3 +75,12 @@ def test_load(tmpdir):
         loader.load(file_name, data, write_mod='wb')
         f.close()
     assert os.path.exists(file_name) is True
+
+
+def test_cli(tmpdir):
+    args = cli.parser.parse_args([URL, '-o', str(tmpdir)])
+    cli.run(args)
+    folder_path = str(tmpdir) + '/' + FOLDER_NAME
+    html_path = str(tmpdir) + '/' + HTML_FILE_NAME
+    assert os.path.exists(folder_path) is True
+    assert os.path.exists(html_path) is True
