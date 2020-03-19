@@ -9,11 +9,7 @@ logger = logging.getLogger()
 def load(path, data, write_mod='w'):
     try:
         with open(path, write_mod) as f:
-            if write_mod == 'wb':
-                for chunk in data.iter_content(8192):
-                    f.write(chunk)
-            else:
-                f.write(data)
+            f.write(data)
     except PermissionError:
         logger.error(f'Permission denied: {path}')
         raise
@@ -27,7 +23,7 @@ def load_local_resource(local_resource,
     logger.info('Start downloading local resources')
     with Bar('Processing', max=count_of_resource) as bar:
         for key, value in local_resource.items():
-            resource_url = getter.get_resource_url(base_url, key)
+            resource_url = base_url + key
             logger.debug(f'Start downloading: {resource_url}')
             response = getter.get_response(resource_url, url_type='resource')
             data, write_mod = getter.get_content_type(response)

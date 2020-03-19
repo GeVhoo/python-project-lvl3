@@ -41,16 +41,9 @@ def get_folder(path_for_folder):
     try:
         if not os.path.exists(path_for_folder):
             os.makedirs(path_for_folder)
-    except FileExistsError:
-        logger.error(f'This folder already exists: {path_for_folder}')
     except PermissionError:
         logger.error(f'Permission denied: {path_for_folder}')
         raise
-
-
-# Get local resources url to download
-def get_resource_url(base_url, resource_path):
-    return base_url + resource_path
 
 
 # Get content type (text or not) and write mod
