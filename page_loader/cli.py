@@ -48,8 +48,8 @@ def run(args):
     html_data = BeautifulSoup(response, 'html.parser')
     # Get local resources from html data
     local_resource = find_local_resources(html_data, host_name)
-    # Downloading resources and change links in html file
+    # Save local resources and change links in html file
     save_local_resource(local_resource, folder_path)
-    # Downloading html file
+    # Save html file
     save(html_file_path, html_data.prettify())
     logger.info('Download complite!')
