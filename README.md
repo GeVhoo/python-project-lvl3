@@ -15,7 +15,7 @@ gv-page-loader https://ru.hexlet.io/courses -o /tmp/tests
 ```
 * You can choose the logging level: 'info' or 'debug'. Default level 'info'.
 ```bash
-gendiff https://ru.hexlet.io/courses -o /tmp/tests -l debug
+gv-page-loader https://ru.hexlet.io/courses -o /tmp/tests -l debug
 ```
 * The utility downloads all resources on the page and changes the page so that it starts to link to local versions.
 

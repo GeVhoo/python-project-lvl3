@@ -1,11 +1,16 @@
 import argparse
 from bs4 import BeautifulSoup
-from page_loader.loader import (load, load_local_resource)
-from page_loader.logger import get_logger
-from page_loader.getter import (get_base_variables,
-                                get_folder,
-                                get_response,
-                                get_local_resource)
+import os
+from page_loader.names_paths_urls import (url_normalization,
+                                          get_host_name,
+                                          get_html_file_name,
+                                          get_folder_name)
+from page_loader.save import (save,
+                              save_local_resource)
+from page_loader.logger import run_logger
+from page_loader.utils import (create_folder,
+                               make_request,
+                               find_local_resources)
 
 parser = argparse.ArgumentParser(description='Page Loader')
 parser.add_argument('url', type=str, help='input page url')
@@ -21,31 +26,30 @@ parser.add_argument('-l', '--level',
 
 # Download url from the network with local resources
 def run(args):
-    url = args.url
+    url = url_normalization(args.url)
     path = args.output
     logging_level = args.level
     # Turn on the logger
-    logger = get_logger(logging_level)
+    logger = run_logger(logging_level)
     logger.info(f'Start downloading {url}')
-    # Get base url (scheme + netloc), names for html file and resource folder
-    base_url, html_file_name, folder_name = get_base_variables(url)
-    # Get download path if folder is specified
+
+    host_name = get_host_name(url)
+    html_file_name = get_html_file_name(url)
+    folder_name = get_folder_name(html_file_name)
+    # Get path if folder is specified
     if path is None:
-        path_for_html_file = html_file_name
-        path_for_folder = folder_name
-    else:
-        path_for_html_file = path + '/' + html_file_name
-        path_for_folder = path + '/' + folder_name
+        path = ''
+    html_file_path = os.path.join(path, html_file_name)
+    folder_path = os.path.join(path, folder_name)
     # Create folder for local resources
-    get_folder(path_for_folder)
-    # Parsing url
-    data = get_response(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-    # Get local resources from url
-    local_resource, count_of_resource = get_local_resource(soup)
+    create_folder(folder_path)
+    # Get data from HTML
+    response = make_request(url).text
+    html_data = BeautifulSoup(response, 'html.parser')
+    # Get local resources from html data
+    local_resource = find_local_resources(html_data, host_name)
     # Downloading resources and change links in html file
-    load_local_resource(local_resource, count_of_resource,
-                        path_for_folder, base_url)
+    save_local_resource(local_resource, folder_path)
     # Downloading html file
-    load(path_for_html_file, soup.prettify())
+    save(html_file_path, html_data.prettify())
     logger.info('Download complite!')
