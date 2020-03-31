@@ -2,7 +2,6 @@ import argparse
 from bs4 import BeautifulSoup
 import os
 from page_loader.names_paths_urls import (url_normalization,
-                                          get_host_name,
                                           get_html_file_name,
                                           get_folder_name)
 from page_loader.save import (save,
@@ -33,7 +32,6 @@ def run(args):
     logger = run_logger(logging_level)
     logger.info(f'Start downloading {url}')
 
-    host_name = get_host_name(url)
     html_file_name = get_html_file_name(url)
     folder_name = get_folder_name(html_file_name)
     # Get path if folder is specified
@@ -47,7 +45,7 @@ def run(args):
     response = make_request(url).text
     html_data = BeautifulSoup(response, 'html.parser')
     # Get local resources from html data
-    local_resource = find_local_resources(html_data, host_name)
+    local_resource = find_local_resources(html_data, url)
     # Save local resources and change links in html file
     save_local_resource(local_resource, folder_path)
     # Save html file

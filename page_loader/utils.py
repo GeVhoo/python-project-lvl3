@@ -1,4 +1,5 @@
 from urllib.parse import urlparse
+from urllib.parse import urljoin
 import os
 import logging
 import requests
@@ -44,7 +45,7 @@ def get_content_type(resource_url_response):
 
 
 # Get a list with all local resources to download
-def find_local_resources(html_data, host_name):
+def find_local_resources(html_data, url):
     local_resource = []
     for tag, attr in RESOURCES.items():
         tag_list = html_data.find_all(tag)
@@ -52,7 +53,7 @@ def find_local_resources(html_data, host_name):
             resource_path = item.get(attr)
             if urlparse(resource_path)[1] == '':
                 if os.path.splitext(resource_path)[1]:
-                    resource_url = host_name + resource_path
+                    resource_url = urljoin(url, resource_path)
                     resource_data = (resource_url,
                                      resource_path,
                                      item,

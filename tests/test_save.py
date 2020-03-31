@@ -10,7 +10,7 @@ def test_save():
     with tempfile.TemporaryDirectory() as tmpdirname:
         tmpdir = tmpdirname
         file_name = os.path.join(str(tmpdir), 'new.jpg')
-        with open('./tests/fixtures/bs.jpg', 'rb') as ef:
+        with open('./tests/fixtures/image/bs.jpg', 'rb') as ef:
             expected_file = ef.read()
             save(file_name, expected_file, write_mod='wb')
             with open(file_name, 'rb') as nf:

@@ -6,11 +6,12 @@ from page_loader.utils import (create_folder,
                                find_local_resources,
                                get_content_type)
 
-HOST = 'https://www.crummy.com'
+URL = 'https://gevhoo.github.io/python-project-lvl3/tests/fixtures/index'
 RESOURCE_LIST = [
-    'https://www.crummy.com/example.com/elsie.js',
-    'https://www.crummy.com/example.com/lacie.py',
-    'https://www.crummy.com/example.com/tillie.py'
+    'https://gevhoo.github.io/python-project-lvl3/tests/fixtures/style/style.css',  # noqa: E501
+    'https://gevhoo.github.io/python-project-lvl3/tests/fixtures/image/python.png',  # noqa: E501
+    'https://gevhoo.github.io/python-project-lvl3/tests/fixtures/image/requests.jpg',  # noqa: E501
+    'https://gevhoo.github.io/python-project-lvl3/tests/fixtures/image/bs.jpg'  # noqa: E501
 ]
 
 
@@ -38,10 +39,11 @@ def test_get_contetn_type():
 
 
 def test_find_local_resource():
-    with open('./tests/fixtures/example.html') as f:
+    with open('./tests/fixtures/index.html') as f:
         html_doc = f.read()
     html_data = BeautifulSoup(html_doc, 'html.parser')
-    local_resources = find_local_resources(html_data, HOST)
+    local_resources = find_local_resources(html_data, URL)
     assert local_resources[0][0] == RESOURCE_LIST[0]
     assert local_resources[1][0] == RESOURCE_LIST[1]
     assert local_resources[2][0] == RESOURCE_LIST[2]
+    assert local_resources[3][0] == RESOURCE_LIST[3]

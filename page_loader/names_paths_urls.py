@@ -5,6 +5,7 @@ import os
 
 
 def url_normalization(url):
+    url = url.rstrip('/')
     url = urlparse(url)
     if url[0] == '' and url[1] == '':
         scheme = 'https://'
@@ -12,11 +13,6 @@ def url_normalization(url):
         return f'{scheme}{netloc}'
     else:
         return urlunparse(url)
-
-
-def get_host_name(url):
-    url = urlparse(url)
-    return f'{url[0]}://{url[1]}'
 
 
 def get_html_file_name(url):
@@ -33,6 +29,7 @@ def get_folder_name(html_file_name):
 
 # Get local resources path to download
 def get_resource_path(folder_path, value):
-    name, ext = os.path.splitext(value[1:])
+    value = value.lstrip('/')
+    name, ext = os.path.splitext(value)
     file_name = re.sub(r'\W', '-', name) + ext
     return os.path.join(folder_path, file_name)
