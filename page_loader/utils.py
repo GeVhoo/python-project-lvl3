@@ -3,7 +3,12 @@ from urllib.parse import urljoin
 import os
 import logging
 import requests
-from page_loader.constants import RESOURCES
+
+RESOURCES = {
+    'link': 'href',
+    'script': 'src',
+    'img': 'src',
+    }
 
 logger = logging.getLogger()
 

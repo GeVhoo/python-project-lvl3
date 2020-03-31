@@ -7,8 +7,7 @@ HELLO = 'Hello World!'
 
 
 def test_save():
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        tmpdir = tmpdirname
+    with tempfile.TemporaryDirectory() as tmpdir:
         file_name = os.path.join(str(tmpdir), 'new.jpg')
         with open('./tests/fixtures/image/bs.jpg', 'rb') as ef:
             expected_file = ef.read()

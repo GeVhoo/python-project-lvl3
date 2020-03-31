@@ -1,4 +1,5 @@
 import argparse
+import logging
 from bs4 import BeautifulSoup
 import os
 from page_loader.names_paths_urls import (url_normalization,
@@ -6,7 +7,7 @@ from page_loader.names_paths_urls import (url_normalization,
                                           get_folder_name)
 from page_loader.save import (save,
                               save_local_resource)
-from page_loader.logger import run_logger
+from page_loader.logger import set_logger
 from page_loader.utils import (create_folder,
                                make_request,
                                find_local_resources)
@@ -29,7 +30,8 @@ def run(args):
     path = args.output
     logging_level = args.level
     # Turn on the logger
-    logger = run_logger(logging_level)
+    set_logger(logging_level)
+    logger = logging.getLogger()
     logger.info(f'Start downloading {url}')
 
     html_file_name = get_html_file_name(url)
