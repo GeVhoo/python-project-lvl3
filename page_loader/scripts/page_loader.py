@@ -10,7 +10,7 @@ from page_loader.storage import url_normalization
 
 
 def main():
-    args = cli.get_args()
+    args = cli.parser.parse_args()
     set_logger(args.level)
     try:
         engine.run(url_normalization(args.url), args.output)
