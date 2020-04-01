@@ -1,6 +1,7 @@
 import tempfile
 import os
-from page_loader import cli
+from page_loader import engine
+from page_loader.storage import url_normalization
 
 URL = 'https://gevhoo.github.io/python-project-lvl3/tests/fixtures/index'
 HTML_FILE_NAME = 'gevhoo-github-io-python-project-lvl3-tests-fixtures-index.html'  # noqa: E501
@@ -12,8 +13,7 @@ RESOURCE4 = 'gevhoo-github-io-python-project-lvl3-tests-fixtures-index_files/ima
 
 def test_run():
     with tempfile.TemporaryDirectory() as tmpdir:
-        args = cli.parser.parse_args([URL, '-o', str(tmpdir)])
-        cli.run(args)
+        engine.run(url_normalization(URL), str(tmpdir))
         html_file_path = os.path.join(str(tmpdir), HTML_FILE_NAME)
         with open(html_file_path) as f:
             html_file = f.read()
