@@ -29,11 +29,11 @@ def run(url, path):
     # Get data from HTML
     response = make_request(url).text
     html_data = BeautifulSoup(response, 'html.parser')
-    # Get local resources from html data
+    # Get local resources and change links in html file
     local_resource = find_local_resources(html_data, url, directory)
     # Save html file
     save(html_file_path, html_data.prettify())
     logger.info(f'HTML file downloaded to: {html_file_path}')
-    # Save local resources and change links in html file
+    # Save local resources
     save_local_resource(local_resource)
     logger.info('Download complite!')
