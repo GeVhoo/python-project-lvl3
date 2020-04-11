@@ -1,15 +1,14 @@
 import logging
 import requests
 
-logger = logging.getLogger()
 
-
-def make_request(url, url_type='html'):
+def make_request(url, *, mandatory=False):
+    logger = logging.getLogger()
     try:
         response = requests.get(url)
         response.raise_for_status()
     except requests.HTTPError as e:
-        if url_type == 'resource':
+        if mandatory is False:
             logger.debug(f'Resource not downloaded: {url}',
                          f' HTTP error occurred: {e}')
         else:
@@ -22,9 +21,7 @@ def make_request(url, url_type='html'):
 def get_content_type(resource_url_response):
     header = resource_url_response.headers
     if header['Content-Type'].startswith('text'):
-        data = resource_url_response.text
-        write_mod = 'w'
+        resource = (resource_url_response.text, 'w')
     else:
-        data = resource_url_response.content
-        write_mod = 'bw'
-    return data, write_mod
+        resource = (resource_url_response.content, 'bw')
+    return resource

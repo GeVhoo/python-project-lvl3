@@ -13,8 +13,8 @@ from page_loader.network import get_content_type
 RESOURCES = {
     'link': 'href',
     'script': 'src',
-    'img': 'src',
-    }
+    'img': 'src'
+}
 
 logger = logging.getLogger()
 
@@ -67,8 +67,9 @@ def find_local_resources(html_data, url, directory):
         tag_list = html_data.find_all(tag)
         for element in tag_list:
             resource_path = element.get(attribute)
-            if urlparse(resource_path)[1] == '':
-                if os.path.splitext(resource_path)[1]:
+            if urlparse(resource_path).netloc == '':
+                extension = os.path.splitext(resource_path)[1]
+                if extension:
                     resource_url = urljoin(url, resource_path)
                     file_path = get_resource_path(directory, resource_path)
                     local_resource[resource_url] = file_path
@@ -97,7 +98,7 @@ def save_local_resource(local_resource):
     with Bar('Processing', max=len(local_resource)) as bar:
         for resource_url, file_path in local_resource.items():
             logger.debug(f'Loading: {resource_url}')
-            response = make_request(resource_url, url_type='resource')
+            response = make_request(resource_url)
             data, write_mod = get_content_type(response)
             save(file_path, data, write_mod)
             logger.debug(f'File downloaded to: {file_path}')
